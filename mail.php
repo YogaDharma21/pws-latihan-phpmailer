@@ -7,8 +7,7 @@ require 'vendor/autoload.php';
 
 $mail = new PHPMailer(true);
 
-$username = "";
-$password = "";
+
 
 try {
     $mail->SMTPDebug = SMTP::DEBUG_OFF;
