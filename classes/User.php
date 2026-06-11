@@ -6,7 +6,15 @@ class User extends Database
 {
     public function login($email, $password)
     {
-
+        $qry = "SELECT * FROM `users` WHERE email = ?";
+        $stmt = $this->conn->prepare($qry);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
     }
     public function register($email, $password)
     {
@@ -21,8 +29,13 @@ class User extends Database
         return $stmt->execute();
     }
 
-    public function verifyEmail($email)
+    public function verifyEmail($token)
     {
+        $qry = "UPDATE `users` SET is_verified = 1, verification_token = '' WHERE verification_token = ?";
 
+        $stmt = $this->conn->prepare($qry);
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        return $stmt->affected_rows > 0;
     }
 }

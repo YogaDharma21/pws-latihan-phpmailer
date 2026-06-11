@@ -8,14 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $verifyUser = $user->login($email, $password);
     if (isset($verifyUser)) {
         $_SESSION['email'] = $verifyUser['email'];
-        $_SESSION['role'] = $verifyUser['role'];
-        if ($_SESSION['role'] == 'admin') {
-            echo "<script>alert('Login Berhasil'); window.location='index.php';</script>";
-        } elseif ($_SESSION['role'] == 'editor') {
-            echo "<script>alert('Login Berhasil'); window.location='editor.php';</script>";
-        } elseif ($_SESSION['role'] == 'viewer') {
-            echo "<script>alert('Login Berhasil'); window.location='beranda.php';</script>";
+        $_SESSION['is_verified'] = $verifyUser['is_verified'];
+
+        if ($_SESSION['is_verified'] != 1) {
+            echo "<script>alert('Akun belum diverifikasi, silakan cek email Anda'); window.location='login.php';</script>";
+            exit();
         }
+        header("Location: index.php");
         exit();
     } else {
         echo "Login Gagal";

@@ -7,8 +7,13 @@ if (isset($_GET['logout'])) {
     exit();
 }
 
-if (!isset($_SESSION['login']) || !isset($_SESSION['username'])) {
+if (!isset($_SESSION['email'])) {
     echo "<script>alert('Anda perlu login terlebih dahulu'); window.location='login.php';</script>";
+    exit();
+}
+
+if ($_SESSION['is_verified'] != 1) {
+    echo "<script>alert('Akun belum diverifikasi, silakan cek email Anda'); window.location='login.php';</script>";
     exit();
 }
 
@@ -23,12 +28,12 @@ if (!isset($_SESSION['login']) || !isset($_SESSION['username'])) {
 </head>
 
 <body>
-    <form method="GET" style="display:inline;"><button type="submit" name="logout" value="1">
-            <button>
-                Logout
-            </button>
+    <form method="GET">
+        <button type="submit" name="logout" value="1">
+            Logout
+        </button>
     </form>
-    <h1>halo <?= $_SESSION['username'] ?></h1>
+    <h1>halo <?= $_SESSION['email'] ?></h1>
 </body>
 
 </html>
